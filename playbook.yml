@@ -4,8 +4,8 @@
   become: true
 
   vars:
-    username: Sagar
-    env: DEV
+    username: shreej hursale
+    env: production
 
   tasks:
     - name: Generate welcome file
