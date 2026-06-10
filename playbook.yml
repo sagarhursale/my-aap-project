@@ -1,0 +1,14 @@
+---
+- name: Jinja2 Template Demo
+  hosts: all
+  become: true
+
+  vars:
+    username: Sagar
+    env: DEV
+
+  tasks:
+    - name: Generate welcome file
+      template:
+        src: templates/welcome.j2
+        dest: /tmp/welcome.txt
