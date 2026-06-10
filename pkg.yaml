@@ -1,0 +1,14 @@
+---
+- name: Install package from AWX Survey
+  hosts: "{{ target_host }}"
+  become: yes
+
+  tasks:
+    - name: Install package
+      package:
+        name: "{{ package_name }}"
+        state: present
+
+    - name: Show success message
+      debug:
+        msg: "Package {{ package_name }} installed successfully on {{ inventory_hostname }}"
