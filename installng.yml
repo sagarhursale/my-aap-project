@@ -1,18 +1,25 @@
 ---
-- hosts: all
+- name: Linux Patching
+  hosts: all
   become: yes
 
   tasks:
-    - name: Install package
-      package:
-        name: "{{ package_name }}"
-        state: present
+    - name: Update all packages (RHEL)
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      when: ansible_os_family == "RedHat"
 
-    - name: Start service
-      service:
-        name: "{{ service_name }}"
-        state: started
-        enabled: true
+    - name: Update all packages (Ubuntu)
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: dist
+      when: ansible_os_family == "Debian"
 
-    - debug:
-        msg: "Installed {{ package_name }} and started {{ service_name }}"
+    - name: Reboot if requested
+      ansible.builtin.reboot:
+      when: reboot_required == "YES"
+
+    - name: Show completion message
+      debug:
+        msg: "Patching completed successfully"
