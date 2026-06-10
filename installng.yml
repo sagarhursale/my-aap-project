@@ -1,6 +1,5 @@
 ---
-- name: Install package using Survey
-  hosts: all
+- hosts: all
   become: yes
 
   tasks:
@@ -9,6 +8,11 @@
         name: "{{ package_name }}"
         state: present
 
-    - name: Show installed package
-      debug:
-        msg: "Installed package: {{ package_name }}"
+    - name: Start service
+      service:
+        name: "{{ service_name }}"
+        state: started
+        enabled: true
+
+    - debug:
+        msg: "Installed {{ package_name }} and started {{ service_name }}"
