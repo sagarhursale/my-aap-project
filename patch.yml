@@ -1,13 +1,30 @@
 ---
-- hosts: all
+- name: Linux Patching
+  hosts: all
   become: yes
 
   tasks:
+    - name: Update all packages (RHEL)
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      when: ansible_os_family == "RedHat"
 
-    - name: Update apt cache
-      apt:
+    - name: Update all packages (Ubuntu)
+      ansible.builtin.apt:
         update_cache: yes
-
-    - name: Upgrade packages
-      apt:
         upgrade: dist
+      when: ansible_os_family == "Debian"
+
+    - name: Show reboot survey value
+      debug:
+        var: reboot_server
+
+    - name: Reboot if requested
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+      when: reboot_server == "YES"
+
+    - name: Show completion message
+      debug:
+        msg: "Patching completed successfully"
